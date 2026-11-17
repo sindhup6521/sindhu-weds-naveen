@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sindhu & Naveen | Wedding Invitation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500&display=swap');
+
+:root {
+  --gold:#d6b36a;
+  --cream:#fff4df;
+  --maroon:#501c2b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;background:#fff8ed;color:var(--maroon);
+ font-family:Poppins,sans-serif;text-align:center;
+}
+.hero{
+ min-height:100vh;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;padding:35px 20px;
+ background:linear-gradient(#35131b99,#35131b99),
+ url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1400')
+ center/cover;color:var(--cream);
+}
+.ornament{color:var(--gold);font-size:35px}
+h1,h2,.names{font-family:'Cormorant Garamond',serif}
+h1{font-size:clamp(42px,9vw,76px);margin:15px 0}
+.names{font-size:clamp(48px,10vw,82px);color:var(--gold)}
+.hero p{letter-spacing:3px}
+.btn{
+ border:1px solid var(--gold);padding:12px 25px;
+ color:var(--cream);background:transparent;
+ border-radius:30px;cursor:pointer;margin:8px;
+}
+section{padding:75px 20px;max-width:850px;margin:auto}
+h2{font-size:40px;font-weight:500;margin:12px}
+.gold{color:#a77b35}
+.divider{color:var(--gold);font-size:26px;margin:18px}
+.card{
+ background:white;border:1px solid #e9d6ad;
+ border-radius:18px;padding:27px;margin:20px auto;
+ box-shadow:0 8px 28px #60321b12;
+}
+.event-date{color:#a77b35;font-size:13px;letter-spacing:2px}
+.event h3{font-family:'Cormorant Garamond',serif;font-size:30px}
+.event p{line-height:1.9}
+.photo{
+ width:100%;max-width:480px;border-radius:16px;
+ margin:20px auto;display:block;object-fit:cover;
+}
+.countdown{
+ display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
+}
+.time{
+ background:var(--maroon);color:white;padding:17px;
+ border-radius:12px;min-width:75px;
+}
+.time strong{display:block;font-size:25px;color:var(--gold)}
+footer{background:var(--maroon);color:var(--cream);padding:45px 15px}
+.reveal{opacity:0;transform:translateY(25px);transition:1s}
+.reveal.show{opacity:1;transform:translateY(0)}
+.lang{position:fixed;right:15px;top:15px;z-index:5;
+ background:#fff4df;color:var(--maroon);border:1px solid var(--gold);
+ border-radius:20px;padding:9px 14px}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ .reveal{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+
+<button class="lang" onclick="toggleLanguage()">ಕನ್ನಡ / English</button>
+
+<div class="hero">
+ <div class="ornament">❋ ❋ ❋</div>
+ <p id="welcome">TOGETHER WITH OUR FAMILIES</p>
+ <div class="names">Sindhu <span style="font-size:35px">&</span> Naveen</div>
+ <p id="invite">REQUEST THE PLEASURE OF YOUR COMPANY</p>
+ <div class="divider">✧ ❀ ✧</div>
+ <h2 id="date">11 – 14 DECEMBER 2026</h2>
+ <button class="btn" onclick="document.getElementById('story').scrollIntoView()">
+ OPEN OUR INVITATION ↓
+ </button>
+ <button class="btn" onclick="playMusic()" id="musicBtn">♫ Play Music</button>
+</div>
+
+<section id="story" class="reveal">
+ <div class="ornament">❀</div>
+ <h2 id="heading">A Celebration of Love</h2>
+ <p id="intro">Two hearts, two families and one beautiful journey.
+ We would be delighted to have you with us as we celebrate
+ the beginning of our forever.</p>
+ <div class="names gold">Sindhu & Naveen</div>
+ <p class="gold">11 — 14 December 2026</p>
+</section>
+
+<section class="reveal">
+ <div class="divider">✧ ❀ ✧</div>
+ <h2 id="schedule">Wedding Celebrations</h2>
+
+ <div class="card event">
+  <div class="event-date">FRIDAY · 11 DECEMBER 2026</div>
+  <h3 id="e1">Devru Pooja</h3>
+  <p id="d1">At our home<br>Seeking divine blessings for our new beginning.</p>
+ </div>
+
+ <div class="card event">
+  <div class="event-date">SATURDAY · 12 DECEMBER 2026</div>
+  <h3 id="e2">Haldi</h3>
+  <p id="d2">After 1:00 PM<br>Guest House beside Varin International School, Tumakuru</p>
+  <h3>Sangeeth</h3>
+  <p id="d3">After 7:00 PM<br>Guest House beside Varin International School, Tumakuru</p>
+  <p class="gold">Dress code: Yellow for Haldi</p>
+ </div>
+
+ <div class="card event">
+  <div class="event-date">SUNDAY · 13 DECEMBER 2026</div>
+  <h3 id="e3">Vara Pooje</h3>
+  <p id="d4">From 3:00 PM onwards<br>SLN Conventional Hall</p>
+ </div>
+
+ <div class="card event">
+  <div class="event-date">13 & 14 DECEMBER 2026</div>
+  <h3 id="e4">Wedding & Reception</h3>
+  <p id="d5">SLN Conventional Hall, Tumakuru<br>
+  Join us as we celebrate our special moments.</p>
+ </div>
+</section>
+
+<section class="reveal">
+ <div class="ornament">✧</div>
+ <h2 id="countTitle">Counting Down to Our Big Day</h2>
+ <div class="countdown">
+  <div class="time"><strong id="days">00</strong>Days</div>
+  <div class="time"><strong id="hours">00</strong>Hours</div>
+  <div class="time"><strong id="minutes">00</strong>Minutes</div>
+  <div class="time"><strong id="seconds">00</strong>Seconds</div>
+ </div>
+</section>
+
+<section class="reveal">
+ <div class="divider">❀</div>
+ <h2 id="venue">Join Us</h2>
+ <div class="card">
+  <h3>SLN Conventional Hall</h3>
+  <p>Tumakuru, Karnataka</p>
+  <a href="https://www.google.com/maps/search/?api=1&query=SLN+Conventional+Hall+Tumkur"
+   target="_blank" style="color:#a77b35">VIEW LOCATION ↗</a>
+ </div>
+</section>
+
+<footer>
+ <div class="ornament">❋</div>
+ <h2 style="font-size:40px">Sindhu & Naveen</h2>
+ <p id="closing">Your presence will make our celebration more special.</p>
+ <p>WITH LOVE ❤️</p>
+</footer>
+
+<script>
+let kannada=false;
+
+function toggleLanguage(){
+ kannada=!kannada;
+ const en={
+ welcome:"TOGETHER WITH OUR FAMILIES",
+ invite:"REQUEST THE PLEASURE OF YOUR COMPANY",
+ heading:"A Celebration of Love",
+ intro:"Two hearts, two families and one beautiful journey. We would be delighted to have you with us as we celebrate the beginning of our forever.",
+ schedule:"Wedding Celebrations",
+ e1:"Devru Pooja",d1:"At our home. Seeking divine blessings for our new beginning.",
+ e2:"Haldi",d2:"After 1:00 PM. Guest House beside Varin International School, Tumakuru",
+ d3:"After 7:00 PM. Guest House beside Varin International School, Tumakuru",
+ e3:"Vara Pooje",d4:"From 3:00 PM onwards. SLN Conventional Hall",
+ e4:"Wedding & Reception",d5:"13 & 14 December. SLN Conventional Hall, Tumakuru",
+ countTitle:"Counting Down to Our Big Day",venue:"Join Us",
+ closing:"Your presence will make our celebration more special."
+ };
+ const kn={
+ welcome:"ನಮ್ಮ ಕುಟುಂಬಗಳ ಆಶೀರ್ವಾದದೊಂದಿಗೆ",
+ invite:"ನಮ್ಮ ವಿವಾಹ ಸಮಾರಂಭಕ್ಕೆ ಆತ್ಮೀಯ ಆಹ್ವಾನ",
+ heading:"ಪ್ರೀತಿಯ ಸಂಭ್ರಮ",
+ intro:"ಎರಡು ಮನಗಳು, ಎರಡು ಕುಟುಂಬಗಳು, ಒಂದು ಸುಂದರ ಹೊಸ ಪಯಣ. ನಮ್ಮ ಜೀವನದ ವಿಶೇಷ ಕ್ಷಣಕ್ಕೆ ನಿಮ್ಮನ್ನು ಆತ್ಮೀಯವಾಗಿ ಆಹ್ವಾನಿಸುತ್ತೇವೆ.",
+ schedule:"ವಿವಾಹದ ಕಾರ್ಯಕ್ರಮಗಳು",
+ e1:"ದೇವರ ಪೂಜೆ",d1:"ನಮ್ಮ ಮನೆಯಲ್ಲಿ",
+ e2:"ಹಳದಿ ಶಾಸ್ತ್ರ",d2:"ಮಧ್ಯಾಹ್ನ 1 ಗಂಟೆಯ ನಂತರ. ವರಿನ್ ಇಂಟರ್‌ನ್ಯಾಷನಲ್ ಶಾಲೆಯ ಪಕ್ಕದ ಗೆಸ್ಟ್ ಹೌಸ್, ತುಮಕೂರು",
+ d3:"ಸಂಜೆ 7 ಗಂಟೆಯ ನಂತರ. ವರಿನ್ ಇಂಟರ್‌ನ್ಯಾಷನಲ್ ಶಾಲೆಯ ಪಕ್ಕದ ಗೆಸ್ಟ್ ಹೌಸ್, ತುಮಕೂರು",
+ e3:"ವರ ಪೂಜೆ",d4:"ಮಧ್ಯಾಹ್ನ 3 ಗಂಟೆಯಿಂದ. SLN ಕನ್ವೆನ್ಷನಲ್ ಹಾಲ್",
+ e4:"ವಿವಾಹ ಮತ್ತು ಆರತಕ್ಷತೆ",d5:"ಡಿಸೆಂಬರ್ 13 ಮತ್ತು 14. SLN ಕನ್ವೆನ್ಷನಲ್ ಹಾಲ್, ತುಮಕೂರು",
+ countTitle:"ನಮ್ಮ ವಿಶೇಷ ದಿನದ ಕ್ಷಣಗಣನೆ",venue:"ನಿಮ್ಮ ಆಗಮನದ ನಿರೀಕ್ಷೆಯಲ್ಲಿ",
+ closing:"ನಿಮ್ಮ ಉಪಸ್ಥಿತಿಯೇ ನಮ್ಮ ಸಂಭ್ರಮಕ್ಕೆ ವಿಶೇಷ ಮೆರುಗು."
+ };
+ const data=kannada?kn:en;
+ for(const id in data)document.getElementById(id).textContent=data[id];
+ document.getElementById("date").textContent=kannada?"11 – 14 ಡಿಸೆಂಬರ್ 2026":"11 – 14 DECEMBER 2026";
+ document.getElementById("musicBtn").textContent=kannada?"♫ ಸಂಗೀತ":"♫ Play Music";
+}
+
+function updateCountdown(){
+ const target=new Date("2026-12-13T06:00:00+05:30").getTime();
+ const diff=Math.max(0,target-Date.now());
+ document.getElementById("days").textContent=Math.floor(diff/86400000);
+ document.getElementById("hours").textContent=Math.floor(diff%86400000/3600000);
+ document.getElementById("minutes").textContent=Math.floor(diff%3600000/60000);
+ document.getElementById("seconds").textContent=Math.floor(diff%60000/1000);
+}
+setInterval(updateCountdown,1000);updateCountdown();
+
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(entry=>{
+  if(entry.isIntersecting)entry.target.classList.add("show");
+ });
+},{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+
+let audioContext=null,playing=false,timer=null;
+function playMusic(){
+ if(!audioContext)audioContext=new (window.AudioContext||window.webkitAudioContext)();
+ if(audioContext.state==="suspended")audioContext.resume();
+ playing=!playing;
+ document.getElementById("musicBtn").textContent=playing?"♫ Pause Music":"♫ Play Music";
+ if(!playing){clearInterval(timer);return;}
+ const notes=[523.25,659.25,783.99,659.25,587.33,698.46];
+ let i=0;
+ timer=setInterval(()=>{
+  if(!playing)return;
+  const osc=audioContext.createOscillator();
+  const gain=audioContext.createGain();
+  osc.type="sine";osc.frequency.value=notes[i++%notes.length];
+  gain.gain.setValueAtTime(.0001,audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.07,audioContext.currentTime+.05);
+  gain.gain.exponentialRampToValueAtTime(.0001,audioContext.currentTime+.8);
+  osc.connect(gain);gain.connect(audioContext.destination);
+  osc.start();osc.stop(audioContext.currentTime+.85);
+ },850);
+}
+</script>
+</body>
+</html>
