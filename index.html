@@ -130,7 +130,7 @@ section.scene.dark{background:#2a201b;color:var(--cream)}.scene-inner{max-width:
 </div>
 <script>
 const opening=document.getElementById('opening'), invitation=document.getElementById('invitation'), song=document.getElementById('song');
-let lang='en', auto=true, autoTimer=null;
+let lang='en', auto=true, scrollFrame=null, lastFrame=0, scrollSpeed=14;
 document.getElementById('openBook').addEventListener('click',async()=>{
   opening.style.display='none'; invitation.style.display='block'; window.scrollTo(0,0);
   try{await song.play();}catch(e){document.getElementById('musicToggle').textContent='▶ Play music';}
@@ -143,13 +143,30 @@ document.getElementById('musicToggle').addEventListener('click',async()=>{
 });
 document.getElementById('autoToggle').addEventListener('click',()=>{
   auto=!auto;document.getElementById('autoToggle').textContent='Auto story: '+(auto?'ON':'OFF');
-  if(auto)startAuto();else clearInterval(autoTimer);
+  if(auto)startAuto();else if(scrollFrame)cancelAnimationFrame(scrollFrame);
 });
 function startAuto(){
-  clearInterval(autoTimer);if(!auto)return;
-  let sections=[...document.querySelectorAll('#invitation header,#invitation section,#invitation footer')],i=1;
-  autoTimer=setInterval(()=>{if(!auto)return;if(i>=sections.length){clearInterval(autoTimer);return;}sections[i].scrollIntoView({behavior:'smooth',block:'start'});i++;},8500);
+  if(scrollFrame) cancelAnimationFrame(scrollFrame);
+  if(!auto) return;
+  lastFrame=0;
+  const step=(time)=>{
+    if(!auto) return;
+    if(!lastFrame) lastFrame=time;
+    const delta=Math.min((time-lastFrame)/1000,0.05);
+    lastFrame=time;
+    const maxScroll=document.documentElement.scrollHeight-window.innerHeight;
+    if(window.scrollY>=maxScroll-2){auto=false;document.getElementById('autoToggle').textContent='Auto story: OFF';return;}
+    window.scrollBy(0,scrollSpeed*delta);
+    scrollFrame=requestAnimationFrame(step);
+  };
+  scrollFrame=requestAnimationFrame(step);
 }
+function pauseAutoForGuest(){
+  if(auto){auto=false;if(scrollFrame)cancelAnimationFrame(scrollFrame);document.getElementById('autoToggle').textContent='Auto story: OFF';}
+}
+window.addEventListener('wheel',pauseAutoForGuest,{passive:true});
+window.addEventListener('touchstart',pauseAutoForGuest,{passive:true});
+window.addEventListener('keydown',(e)=>{if(['ArrowDown','PageDown',' ','End'].includes(e.key))pauseAutoForGuest();});
 function revealNow(){
   const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
