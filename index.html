@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#241b17">
 <style>
 :root{--cream:#f6efe4;--ink:#281e19;--gold:#c49a58;--rose:#a75c54;--muted:#76665a}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--cream);font-family:Georgia,'Times New Roman',serif;overflow-x:hidden}
+*{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;background:var(--ink);color:var(--cream);font-family:Georgia,'Times New Roman',serif;overflow-x:hidden}
 button{font:inherit}.opening{min-height:100svh;display:grid;place-items:center;text-align:center;padding:28px;background:radial-gradient(ellipse at center,#584236 0,#281e19 65%,#17110e 100%);position:relative;overflow:hidden}
 .opening:before,.opening:after{content:"";position:absolute;width:65vw;height:65vw;border:1px solid #c49a5844;border-radius:50%;pointer-events:none}.opening:after{width:82vw;height:82vw}
 .open-inner{z-index:1;max-width:700px}.eyebrow{letter-spacing:.28em;text-transform:uppercase;color:#dfbd83;font:11px Arial,sans-serif}
@@ -130,11 +130,17 @@ section.scene.dark{background:#2a201b;color:var(--cream)}.scene-inner{max-width:
 </div>
 <script>
 const opening=document.getElementById('opening'), invitation=document.getElementById('invitation'), song=document.getElementById('song');
-let lang='en', auto=true, scrollFrame=null, lastFrame=0, scrollSpeed=14;
-document.getElementById('openBook').addEventListener('click',async()=>{
-  opening.style.display='none'; invitation.style.display='block'; window.scrollTo(0,0);
-  try{await song.play();}catch(e){document.getElementById('musicToggle').textContent='▶ Play music';}
-  revealNow(); startAuto();
+let lang='en', auto=true, scrollFrame=null, lastFrame=0, scrollSpeed=18, userInteracting=false;
+document.getElementById('openBook').addEventListener('click',()=>{
+  opening.style.display='none';
+  invitation.style.display='block';
+  window.scrollTo(0,0);
+  song.play().catch(()=>{document.getElementById('musicToggle').textContent='▶ Play music';});
+  revealNow();
+  auto=true;
+  document.getElementById('autoToggle').textContent='Auto story: ON';
+  // Start after the opening tap has finished, so it cannot cancel the scroll.
+  setTimeout(startAuto,900);
 });
 document.getElementById('musicToggle').addEventListener('click',async()=>{
   if(song.paused){try{await song.play();}catch(e){}}
@@ -142,31 +148,45 @@ document.getElementById('musicToggle').addEventListener('click',async()=>{
   document.getElementById('musicToggle').textContent=song.paused?'▶ Play music':'Ⅱ Pause music';
 });
 document.getElementById('autoToggle').addEventListener('click',()=>{
-  auto=!auto;document.getElementById('autoToggle').textContent='Auto story: '+(auto?'ON':'OFF');
-  if(auto)startAuto();else if(scrollFrame)cancelAnimationFrame(scrollFrame);
+  auto=!auto;
+  document.getElementById('autoToggle').textContent='Auto story: '+(auto?'ON':'OFF');
+  if(auto){userInteracting=false;startAuto();}
+  else if(scrollFrame)cancelAnimationFrame(scrollFrame);
 });
 function startAuto(){
-  if(scrollFrame) cancelAnimationFrame(scrollFrame);
-  if(!auto) return;
+  if(scrollFrame)cancelAnimationFrame(scrollFrame);
+  if(!auto || userInteracting)return;
   lastFrame=0;
   const step=(time)=>{
-    if(!auto) return;
-    if(!lastFrame) lastFrame=time;
+    if(!auto || userInteracting)return;
+    if(!lastFrame)lastFrame=time;
     const delta=Math.min((time-lastFrame)/1000,0.05);
     lastFrame=time;
-    const maxScroll=document.documentElement.scrollHeight-window.innerHeight;
-    if(window.scrollY>=maxScroll-2){auto=false;document.getElementById('autoToggle').textContent='Auto story: OFF';return;}
-    window.scrollBy(0,scrollSpeed*delta);
+    const maxScroll=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
+    if(window.scrollY>=maxScroll-2){
+      auto=false;
+      document.getElementById('autoToggle').textContent='Auto story: OFF';
+      return;
+    }
+    window.scrollTo(0,Math.min(maxScroll,window.scrollY+scrollSpeed*delta));
     scrollFrame=requestAnimationFrame(step);
   };
   scrollFrame=requestAnimationFrame(step);
 }
 function pauseAutoForGuest(){
-  if(auto){auto=false;if(scrollFrame)cancelAnimationFrame(scrollFrame);document.getElementById('autoToggle').textContent='Auto story: OFF';}
+  if(auto){
+    userInteracting=true;
+    auto=false;
+    if(scrollFrame)cancelAnimationFrame(scrollFrame);
+    document.getElementById('autoToggle').textContent='Auto story: OFF';
+  }
 }
+// Listen only for actual guest movement, not the initial tap on the books.
 window.addEventListener('wheel',pauseAutoForGuest,{passive:true});
-window.addEventListener('touchstart',pauseAutoForGuest,{passive:true});
-window.addEventListener('keydown',(e)=>{if(['ArrowDown','PageDown',' ','End'].includes(e.key))pauseAutoForGuest();});
+window.addEventListener('touchmove',pauseAutoForGuest,{passive:true});
+window.addEventListener('keydown',(e)=>{
+  if(['ArrowDown','ArrowUp','PageDown','PageUp',' ','Home','End'].includes(e.key))pauseAutoForGuest();
+});
 function revealNow(){
   const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
